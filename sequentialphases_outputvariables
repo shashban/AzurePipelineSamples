@@ -1,12 +1,25 @@
 # A pipeline with three sequential phases
 # Output variables from previous phases are being referred
 
-pool: Hosted VS2017
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+phases:
+  - phase: A
+    pool: Hosted VS2017
+    steps:
+        - powershell: echo "##vso[task.setvariable variable=myOutputVar;isOutput=true]this is the output variable set in phase A"
+          name: setoutputvar
+          displayName: 'set output variable'
+        - script: echo $(setoutputvar.myOutputVar)
+          displayName: 'Run a script'
+  - phase: B
+    dependsOn: A
+    pool: Hosted VS2017
+    variables:
+        myVarFromPhaseA: $[dependencies.A.outputs['setoutputvar.myOutputVar'].]
+    steps:
+        - powershell: echo "##vso[task.setvariable variable=myOutputVar;isOutput=true]this is the output variable set in phase B"
+          name: setoutputvar
+          displayName: 'set output variable'
+        - script: |
+            echo $(myVarFromPhaseA)  
+            echo $(setoutputvar.myOutputVar)
+          name: echovar

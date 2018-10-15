@@ -27,7 +27,10 @@ jobs:
     dependsOn: B
     pool: Hosted VS2017
     variables:
+        myVarFromJobA: $[dependencies.A.outputs['setoutputvar.myOutputVarA']]
         myVarFromJobB: $[dependencies.B.outputs['setoutputvar.myOutputVarB']]
     steps:
-        - script: echo $(myVarFromJobB)  
+        - script: |
+            echo $(myVarFromJobA) 
+            echo $(myVarFromJobB)  
           name: echovar

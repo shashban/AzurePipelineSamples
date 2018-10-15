@@ -1,25 +1,33 @@
-# A pipeline with three sequential phases
-# Output variables from previous phases are being referred
+# A pipeline with three sequential jobs
+# Output variables from previous jobs are being referred
 
 jobs:
   - job: A
     pool: Hosted VS2017
     steps:
-        - powershell: echo "##vso[task.setvariable variable=myOutputVar;isOutput=true]this is the output variable set in job A"
+        - powershell: echo "##vso[task.setvariable variable=myOutputVarA;isOutput=true]this is the output variable set in job A"
           name: setoutputvar
           displayName: 'set output variable'
-        - script: echo $(setoutputvar.myOutputVar)
+        - script: echo $(setoutputvar.myOutputVarA)
           displayName: 'Run a script'
   - job: B
     dependsOn: A
     pool: Hosted VS2017
     variables:
-        myVarFromPhaseA: $[dependencies.A.outputs['setoutputvar.myOutputVar'].]
+        myVarFromJobA: $[dependencies.A.outputs['setoutputvar.myOutputVarA']]
     steps:
-        - powershell: echo "##vso[task.setvariable variable=myOutputVar;isOutput=true]this is the output variable set in job B"
+        - powershell: echo "##vso[task.setvariable variable=myOutputVarB;isOutput=true]this is the output variable set in job B"
           name: setoutputvar
           displayName: 'set output variable'
         - script: |
-            echo $(myVarFromPhaseA)  
-            echo $(setoutputvar.myOutputVar)
+            echo $(myVarFromJobA)  
+            echo $(setoutputvar.myOutputVarB)
+          name: echovar
+  - job: C
+    dependsOn: B
+    pool: Hosted VS2017
+    variables:
+        myVarFromJobB: $[dependencies.B.outputs['setoutputvar.myOutputVarB']]
+    steps:
+        - script: echo $(myVarFromJobB)  
           name: echovar

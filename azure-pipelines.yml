@@ -6,12 +6,14 @@ jobs:
   - powershell: 
     displayName: 'PowerShell Script'
 - job: Phase_2
-  displayName: Agentless job
+  displayName: Agentless
   condition: succeeded()
   pool: server
   steps:
   - task: Delay@1
     displayName: 'Delay by 0 minutes'
+    inputs:
+      delayForMinutes: 1
 - job: Phase_3
   displayName: C
   condition: succeeded()

@@ -8,7 +8,7 @@ jobs:
 - job: Phase_2
   displayName: Agentless job
   condition: succeeded()
-  server: true
+  pool: server
   steps:
   - task: Delay@1
     displayName: 'Delay by 0 minutes'

@@ -5,6 +5,7 @@ jobs:
   - job: A
     pool: Hosted VS2017
     steps:
+        - checkout: none
         - powershell: echo "##vso[task.setvariable variable=myOutputVarA;isOutput=true]this is the output variable set in job A"
           name: setoutputvar
           displayName: 'set output variable'

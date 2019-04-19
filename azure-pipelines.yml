@@ -9,14 +9,15 @@ stages:
       displayName: 'PowerShell Script'
   - job: Phase_2
     displayName: Agentless
-    condition: succeeded()
     pool: server
     steps:
-    - task: ManualIntervention@8
-      displayName: 'Manual Intervention'    
+    - task: Delay@1
+      inputs:
+        delayForMinutes: '1'
   - job: Phase_3
     displayName: C
     condition: succeeded()
+    dependsOn: Phase_1, Phase_2
     pool : Hosted VS2017
     steps:
     - powershell: Write-Host "Ths is Phase3" 

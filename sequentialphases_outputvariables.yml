@@ -23,7 +23,8 @@ jobs:
         - powershell: |
             Write-Host "Variable obtained from Job A - $(myVarFromJobA)"
             Write-Host "Variable set in this job - $(setoutputvar.myOutputVarB)"
-          name: 'Print variables'
+          name: printvars
+          displayname: 'Print variables'
   - job: C
     dependsOn: B
     pool: Hosted VS2017
@@ -35,4 +36,5 @@ jobs:
             Write-Host "Accessing variables from dependent jobs"
             Write-Host "Variable set in Job A says - $(myVarFromJobA)" 
             Write-Host "Variable set on Job B says - $(myVarFromJobB)"
-          name: 'Print dependent variables'
+          name: printvars
+          displayname: 'Print variables'

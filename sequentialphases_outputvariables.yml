@@ -6,10 +6,10 @@ jobs:
     pool: Hosted VS2017
     steps:
         - checkout: none
-        - script: echo "##vso[task.setvariable variable=myOutputVarA;isOutput=true]I was set in Job A"
+        - script: echo ##vso[task.setvariable variable=myOutputVarA;isOutput=true]I was set in Job A
           name: setoutputvar
           displayName: 'set output variable'
-        - powershell: Write-Host "Variable set in this job - $(setoutputvar.myOutputVarA)"
+        - powershell: Write-Host 'Variable set in this job - $(setoutputvar.myOutputVarA)'
           displayName: 'Run a script'
   - job: B
     dependsOn: A
@@ -21,8 +21,8 @@ jobs:
           name: setoutputvar
           displayName: 'set output variable'
         - powershell: |
-            Write-Host "Variable obtained from Job A - $(myVarFromJobA)"
-            Write-Host "Variable set in this job - $(setoutputvar.myOutputVarB)"
+            Write-Host 'Variable obtained from Job A - $(myVarFromJobA)'
+            Write-Host 'Variable set in this job - $(setoutputvar.myOutputVarB)'
           displayName: 'Print variables'
   - job: C
     dependsOn: B
@@ -33,6 +33,6 @@ jobs:
     steps:
         - powershell: |
             Write-Host "Accessing variables from dependent jobs"
-            Write-Host "Variable set in Job A says - $(myVarFromJobA)" 
-            Write-Host "Variable set on Job B says - $(myVarFromJobB)"
+            Write-Host 'Variable set in Job A says - $(myVarFromJobA)' 
+            Write-Host 'Variable set on Job B says - $(myVarFromJobB)'
           displayName: 'Print variables'

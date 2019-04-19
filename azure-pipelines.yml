@@ -1,21 +1,23 @@
-jobs:
-- job: Phase_1
-  displayName: A
-  pool: Hosted VS2017
-  steps:
-  - powershell: 
-    displayName: 'PowerShell Script'
-- job: Phase_2
-  displayName: Agentless
-  condition: succeeded()
-  pool: server
-  steps:
-  - task: ManualIntervention@8
-    displayName: 'Manual Intervention'    
-- job: Phase_3
-  displayName: C
-  condition: succeeded()
-  pool : Hosted VS2017
-  steps:
-  - powershell: 
-    displayName: 'PowerShell Script'
+stages:
+- stage: Stage1
+  jobs:
+  - job: Phase_1
+    displayName: A
+    pool: Hosted VS2017
+    steps:
+    - powershell: Write-Host 'Hellow World'
+      displayName: 'PowerShell Script'
+  - job: Phase_2
+    displayName: Agentless
+    condition: succeeded()
+    pool: server
+    steps:
+    - task: ManualIntervention@8
+      displayName: 'Manual Intervention'    
+  - job: Phase_3
+    displayName: C
+    condition: succeeded()
+    pool : Hosted VS2017
+    steps:
+    - powershell: Write-Host "Ths is Phase3" 
+      displayName: 'PowerShell Script'

@@ -1,0 +1,41 @@
+
+trigger:
+- master
+
+stages:
+- stage: Build_1
+  displayName: BuildStage_1
+  jobs:  
+  - job: Build
+    displayName: Build job 1
+    steps:
+    - script: | 
+        echo Hello, world !! 
+        echo Replace me with your build steps
+      displayName: 'Build'
+- stage: Build_2
+  displayName: BuildStage_1
+  dependsOn: []
+  jobs:  
+  - job: Build
+    displayName: Build job 2
+    steps:
+    - script: | 
+        echo Hello, world !! 
+        echo Replace me with your build steps
+      displayName: 'Build'
+- stage: Deploy
+  displayName: Deploy stage
+  dependsOn:
+  - Build_1
+  - Build_2
+  jobs:
+  - deployment: deploy
+    displayName: Deploy job
+    environment: 'myFirstEnvironment'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - powershell: Write-Host "run your deployment steps"
+            displayName: Run Deployment

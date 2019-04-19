@@ -9,7 +9,7 @@ jobs:
         - script: echo "##vso[task.setvariable variable=myOutputVarA;isOutput=true]I was set in Job A"
           name: setoutputvar
           displayName: 'set output variable'
-        - script: echo "Variable set in this job - $(setoutputvar.myOutputVarA)"
+        - script: echo "Variable set in this job; $(setoutputvar.myOutputVarA)"
           displayName: 'Run a script'
   - job: B
     dependsOn: A
@@ -21,8 +21,8 @@ jobs:
           name: setoutputvar
           displayName: 'set output variable'
         - script: |
-            echo "Variable obtained from Job A - $(myVarFromJobA)"
-            echo "Variable set in this job - $(setoutputvar.myOutputVarB)"
+            echo "Variable obtained from Job A; $(myVarFromJobA)"
+            echo "Variable set in this job; $(setoutputvar.myOutputVarB)"
           name: 'Echo variables'
   - job: C
     dependsOn: B
@@ -33,6 +33,6 @@ jobs:
     steps:
         - script: |
             echo "Accessing variables from dependent jobs"
-            echo "Variable set in Job A says - $(myVarFromJobA)" 
-            echo "Variable set on Job B says - $(myVarFromJobB)"
+            echo "Variable set in Job A says; $(myVarFromJobA)" 
+            echo "Variable set on Job B says; $(myVarFromJobB)"
           name: 'Echo variables'

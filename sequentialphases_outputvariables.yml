@@ -9,7 +9,7 @@ jobs:
         - script: echo "##vso[task.setvariable variable=myOutputVarA;isOutput=true]I was set in Job A"
           name: setoutputvar
           displayName: 'set output variable'
-        - script: echo "Variable set in this job; $(setoutputvar.myOutputVarA)"
+        - powershell: Write-Host "Variable set in this job - $(setoutputvar.myOutputVarA)"
           displayName: 'Run a script'
   - job: B
     dependsOn: A
@@ -20,9 +20,9 @@ jobs:
         - powershell: echo "##vso[task.setvariable variable=myOutputVarB;isOutput=true]I was set in Job B"
           name: setoutputvar
           displayName: 'set output variable'
-        - script: |
-            echo "Variable obtained from Job A; $(myVarFromJobA)"
-            echo "Variable set in this job; $(setoutputvar.myOutputVarB)"
+        - powershell: |
+            Write-Host "Variable obtained from Job A - $(myVarFromJobA)"
+            Write-Host "Variable set in this job - $(setoutputvar.myOutputVarB)"
           name: 'Echo variables'
   - job: C
     dependsOn: B
@@ -32,7 +32,7 @@ jobs:
         myVarFromJobB: $[dependencies.B.outputs['setoutputvar.myOutputVarB']]
     steps:
         - script: |
-            echo "Accessing variables from dependent jobs"
-            echo "Variable set in Job A says; $(myVarFromJobA)" 
-            echo "Variable set on Job B says; $(myVarFromJobB)"
+            Write-Host "Accessing variables from dependent jobs"
+            Write-Host "Variable set in Job A says - $(myVarFromJobA)" 
+            Write-Host "Variable set on Job B says - $(myVarFromJobB)"
           name: 'Echo variables'

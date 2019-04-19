@@ -1,0 +1,36 @@
+trigger:
+- master
+
+stages:
+- stage: Build
+  displayName: Build stage
+  jobs:  
+  - job: Build
+    displayName: Build job
+    steps:
+    - script: | 
+        echo Hello, world !! 
+        echo Replace me with your build steps
+      displayName: 'Build'
+    - powershell: Write-Host "Run unit tests for your application."        
+      displayName: 'Unit Testing'
+    - task: PublishPipelineArtifact@0
+      displayName: Publish Artifacts
+      inputs:
+        artifactName: drop
+        targetPath: '$(Build.SourcesDirectory)'
+- stage: Deploy
+  displayName: Deploy stage
+  jobs:
+  - deployment: deploy
+    displayName: Deploy job
+    environment: 'myFirstEnvironment'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - script: dir $(Pipeline.Workspace)
+            displayName: List Artifact Contents
+          - powershell: Write-Host "run your deployment steps"
+            displayName: Run Deployment
+

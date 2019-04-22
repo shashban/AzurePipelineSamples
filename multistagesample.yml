@@ -1,0 +1,48 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+stages:
+- stage: A
+  jobs:
+  - job: A
+    pool:
+      vmImage: 'Ubuntu 16.04'
+    steps:
+    - checkout: none
+    - script: echo A!
+
+- stage: B
+  dependsOn: A
+  jobs:
+  - job: B
+    pool:
+      vmImage: 'Ubuntu 16.04'
+    steps:
+    - checkout: none
+    - script: echo B!
+
+- stage: C
+  dependsOn: A
+  jobs:
+  - job: C
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/releases')
+    pool:
+      vmImage: 'Ubuntu 16.04'
+    steps:
+    - checkout: none
+    - script: echo C!
+    
+- stage: D
+  dependsOn:
+  - B
+  - C
+  condition: always()
+  jobs:
+  - job: D
+    pool:
+      vmImage: 'Ubuntu 16.04'
+    steps:
+    - checkout: none
+    - script: echo D!

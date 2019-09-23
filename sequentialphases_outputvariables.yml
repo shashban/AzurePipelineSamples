@@ -4,13 +4,20 @@
 jobs:
   - job: A
     pool: Hosted VS2017
+    variables:
+    - name: myVar
+      value: InitialValue
     steps:
         - checkout: none
+        - powershell: Write-Host 'Initial Variable value - ' + $(myVar)
+          displayName: 'Run a script'
+        - powershell: echo "##vso[task.setvariable variable=myVar;]NewValue"
         - powershell: echo "##vso[task.setvariable variable=myOutputVarA;isOutput=true]I was set in Job A"
           name: setoutputvar
           displayName: 'set output variable'
         - powershell: Write-Host 'Variable set in this job - ' + $(setoutputvar.myOutputVarA)
           displayName: 'Run a script'
+        - powershell: Write-Host $(myVar)
   - job: B
     dependsOn: A
     pool: Hosted VS2017
